@@ -61,6 +61,17 @@ answer = rag_chain(query)
 print(answer)
 
 
+
+
+
+
+
+
+
+
+
+
+
 #######**** This is a RAG pipeline where:
 # Query is converted into embedding
 # Compared with stored document embeddings
