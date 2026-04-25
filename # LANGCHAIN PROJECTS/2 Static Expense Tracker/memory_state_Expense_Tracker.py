@@ -4,6 +4,7 @@ from langchain_community.vectorstores import FAISS
 from langchain.embeddings.base import Embeddings
 from langchain_core.documents import Document
 from langchain_core.prompts import PromptTemplate
+from langchain_community.chains import RetrievalQA
 from google import genai
 from datetime import datetime
 
