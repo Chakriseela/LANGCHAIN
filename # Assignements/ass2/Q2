@@ -1,0 +1,25 @@
+import time
+
+def retry(max_attempts, delay):
+    def decorator(func):
+        def wrapper(*args, **kwargs):
+            for i in range(max_attempts):
+                try:
+                    return func(*args, **kwargs)
+                except Exception:
+                    print(f"Retry {i+1}")
+                    if i == max_attempts - 1:
+                        raise
+                    time.sleep(delay)
+        return wrapper
+    return decorator
+
+
+@retry(3, 2)
+def test():
+    import random
+    if random.random() < 0.8:
+        raise Exception("Fail")
+    return "Success"
+
+print(test())
