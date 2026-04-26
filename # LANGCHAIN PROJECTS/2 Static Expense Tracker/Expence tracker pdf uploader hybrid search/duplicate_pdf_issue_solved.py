@@ -1,9 +1,14 @@
+'''
+
+
 # =========================================================
 # 📄 PDF UPLOADER (FIXED - NO DUPLICATES)
 # =========================================================
 import os
 import uuid
 import streamlit as st
+from langchain_community.document_loaders import PyPDFLoader, WebBaseLoader
+from langchain_core.documents import Document
 
 st.subheader("📄 Upload PDF")
 
@@ -60,3 +65,6 @@ if pdf:
 
     else:
         st.info("📌 This PDF is already processed. Skipping...")
+
+
+'''
