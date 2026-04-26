@@ -288,21 +288,7 @@ if st.button("Get Answer"):
         st.warning("No data available")
 
     elif query:
-
-        # Hybrid Retrieval
-        # faiss_ret = st.session_state.vectorstore.as_retriever(search_kwargs={"k": 5})
-        # bm25 = BM25Retriever.from_documents(st.session_state.documents)
-
-        # hybrid = EnsembleRetriever(
-        #     retrievers=[bm25, faiss_ret],
-        #     weights=[0.5, 0.5]
-        # )
-
-        # docs = hybrid.invoke(query)
-        # docs = rerank(query, docs)[:5]
-
-        # context = "\n".join([d.page_content for d in docs])
-
+        
         # -----------------------------
         # 🔥 MANUAL HYBRID RETRIEVAL
         # -----------------------------
@@ -329,7 +315,7 @@ if st.button("Get Answer"):
                 seen.add(doc.page_content)
 
         # 5️⃣ Re-rank (your custom logic)
-        docs = rerank(query, unique_docs)[:5]
+        docs = rerank(query, unique_docs)[:15]
 
         # 6️⃣ Final Context
         context = "\n".join([d.page_content for d in docs])

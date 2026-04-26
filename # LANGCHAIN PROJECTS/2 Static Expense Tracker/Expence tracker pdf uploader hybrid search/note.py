@@ -33,4 +33,25 @@ from langchain.retrievers.ensemble import EnsembleRetriever
 
 
 pip install trulens trulens-apps-langchain trulens-providers-openai openai langchain langchain_community langchain_openai rank_bm25 faiss_cpu
+
+
+
+
+
+
+        # Hybrid Retrieval using EnsembleRetriever
+        # faiss_ret = st.session_state.vectorstore.as_retriever(search_kwargs={"k": 5})
+        # bm25 = BM25Retriever.from_documents(st.session_state.documents)
+
+        # hybrid = EnsembleRetriever(
+        #     retrievers=[bm25, faiss_ret],
+        #     weights=[0.5, 0.5]
+        # )
+
+        # docs = hybrid.invoke(query)
+        # docs = rerank(query, docs)[:5]
+
+        # context = "\n".join([d.page_content for d in docs])
+
+
 '''
