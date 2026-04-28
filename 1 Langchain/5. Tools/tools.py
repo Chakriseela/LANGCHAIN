@@ -6,13 +6,14 @@
 # =========================
 from langchain.tools import tool
 from langchain_core.tools import StructuredTool
-# from langchain.agents import initialize_agent
-from langchain.agents import create_react_agent, AgentExecutor
+from langchain.agents import initialize_agent
+from langgraph.prebuilt import create_react_agent
+from langchain.agents import AgentExecutor
 from langchain_openai import ChatOpenAI
 # from langchain_community.llms import OpenAI
 from langchain_openai import OpenAIEmbeddings
 from langchain_community.vectorstores import FAISS
-from langchain_community.chains import RetrievalQA
+from langchain_classic.chains.retrieval_qa.base import RetrievalQA
 from pydantic import BaseModel
 
 # =========================
