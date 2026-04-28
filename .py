@@ -1,21 +1,17 @@
-from langchain_community.vectorstores import FAISS
-from langchain.embeddings import OpenAIEmbeddings
-from langchain_community.chains import RetrievalQA
-from langchain_community.llms import OpenAI
+# pip install -qU deepagents langchain-google-genai
+from deepagents import create_deep_agent
 
-# Load vector DB
-vectorstore = FAISS.load_local("db", OpenAIEmbeddings())
+def get_weather(city: str) -> str:
+    """Get weather for a given city."""
+    return f"It's always sunny in {city}!"
 
-# LLM
-llm = OpenAI()
-
-# RAG Chain
-qa = RetrievalQA.from_chain_type(
-    llm=llm,
-    retriever=vectorstore.as_retriever()
+agent = create_deep_agent(
+    model="google_genai:gemini-3.1-pro-preview",
+    tools=[get_weather],
+    system_prompt="You are a helpful assistant",
 )
 
-query = "What did I spend last month?"
-result = qa.run(query)
-
-print(result)
+# Run the agent
+agent.invoke(
+    {"messages": [{"role": "user", "content": "what is the weather in sf"}]}
+)
