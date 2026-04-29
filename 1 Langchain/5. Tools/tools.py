@@ -58,7 +58,7 @@ vector_db = FAISS.from_texts(documents, embeddings)
 retriever = vector_db.as_retriever()
 
 qa_chain = RetrievalQA.from_chain_type(
-    llm=OpenAI(),
+    llm=ChatOpenAI(),
     retriever=retriever
 )
 
