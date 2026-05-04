@@ -1,0 +1,66 @@
+# 🔓 OPTION 1: Self-host GPU + Public API (quick, but risky)
+# 🧠 Goal
+
+# Your GPU (home/on-prem) runs the model → internet users (your phone) can call it.
+
+# 🧱 Architecture
+# 📱 Phone → 🌍 Internet → 🌐 Public URL → 🖥️ Your GPU Server (LLM API)
+# 🛠️ Step-by-step
+# 1) Run your model as an API
+
+# Use Ollama (simplest):
+
+# ollama serve   # starts server at http://localhost:11434
+# ollama run llama3
+
+# Test locally:
+
+# curl http://localhost:11434/api/chat -d '{
+#   "model":"llama3",
+#   "messages":[{"role":"user","content":"hello"}]
+# }'
+# 2) Expose it to the internet (2 ways)
+# 🔹 Way A (fast): Tunnel with ngrok
+# ngrok http 11434
+
+# You’ll get:
+
+# https://abc123.ngrok-free.app
+
+# 👉 Now your phone can call:
+
+# fetch("https://abc123.ngrok-free.app/api/chat", {...})
+
+# Pros: 2 minutes setup
+# Cons: temporary URL, not secure for real data
+
+
+
+
+
+# 🔹 Way B (real): Public IP + reverse proxy with NGINX
+# a) Get a public IP
+# Home router port-forward OR
+# VPS (better)
+# b) Install NGINX
+# sudo apt install nginx
+# c) Configure proxy
+# server {
+#     listen 80;
+
+#     location /ai/ {
+#         proxy_pass http://localhost:11434/;
+#     }
+# }
+# d) (Important) Add HTTPS
+
+# Use Let’s Encrypt (certbot):
+
+# sudo apt install certbot python3-certbot-nginx
+# sudo certbot --nginx
+# e) Call from React
+# fetch("https://yourdomain.com/ai/api/chat", {...})
+# ⚠️ Why “risky”?
+# Public exposure → attacks, scraping
+# No network isolation
+# Must add auth, rate limits, WAF
