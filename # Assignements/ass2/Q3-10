@@ -1,0 +1,46 @@
+# 3. Convert all names to uppercase
+names_list = ["charan", "jahnavi", "sana"]
+uppercase_names = [name.upper() for name in names_list]
+print("3. Uppercase Names:", uppercase_names)
+
+
+# 4. Extract the first letter from each word
+words_list = ["apple", "banana", "cherry"]
+first_letters_list = [word[0] for word in words_list]
+print("4. First Letters:", first_letters_list)
+
+
+# 5. Create a list of word lengths from a sentence
+sentence_text = "Python is very powerful"
+word_lengths = [len(word) for word in sentence_text.split()]
+print("5. Word Lengths:", word_lengths)
+
+
+# 6. Extract only positive numbers from a list
+numbers_list = [-5, 10, -2, 7, 0, 3]
+positive_numbers = [num for num in numbers_list if num > 0]
+print("6. Positive Numbers:", positive_numbers)
+
+
+# 7. Create a list containing only vowels from a string
+input_string = "hello world"
+vowel_list = [char for char in input_string if char.lower() in "aeiou"]
+print("7. Vowels:", vowel_list)
+
+
+# 8. Split sentence and remove words shorter than 4 characters
+sentence_input = "This is a simple Python program"
+long_words = [word for word in sentence_input.split() if len(word) >= 4]
+print("8. Words (>=4 chars):", long_words)
+
+
+# 9. Reverse each word in a list
+original_words = ["python", "java", "code"]
+reversed_words_list = [word[::-1] for word in original_words]
+print("9. Reversed Words:", reversed_words_list)
+
+
+# 10. Keep only alphanumeric characters from a string
+mixed_string = "Hello@123 World!!"
+clean_string = ''.join([char for char in mixed_string if char.isalnum()])
+print("10. Alphanumeric Only:", clean_string)

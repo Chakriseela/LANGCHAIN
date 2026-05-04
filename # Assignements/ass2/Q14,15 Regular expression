@@ -1,0 +1,62 @@
+import re
+
+# 14. Given a large text
+text_data = """
+Hello everyone! Today is 12-05-2024. Visit https://example.com or http://test.in.
+Contact @support or use #Python #AI.
+The price is 4500 and discount is 20%.
+Another date is 25-12-2023.
+"""
+
+# Extract all numbers
+numbers_list = re.findall(r'\d+', text_data)
+print("Numbers:", numbers_list)
+
+# Extract words starting with capital letters
+capital_words = re.findall(r'\b[A-Z][a-z]*\b', text_data)
+print("Capital Words:", capital_words)
+
+# Extract hashtags
+hashtags_list = re.findall(r'#\w+', text_data)
+print("Hashtags:", hashtags_list)
+
+# Extract URLs
+urls_list = re.findall(r'https?://\S+', text_data)
+print("URLs:", urls_list)
+
+# Extract dates in DD-MM-YYYY format
+dates_list = re.findall(r'\b\d{2}-\d{2}-\d{4}\b', text_data)
+print("Dates:", dates_list)
+
+# **************************************************************
+
+# 15. Using regex
+
+# Remove extra spaces
+sentence_text = "Python   is  a   very powerful   language"
+clean_sentence = re.sub(r'\s+', ' ', sentence_text)
+print("\nClean Sentence:", clean_sentence)
+
+
+# Replace digits with *
+user_text = "User123 has 45 new messages and 2 missed calls."
+masked_digits = re.sub(r'\d', '*', user_text)
+print("Masked Digits:", masked_digits)
+
+
+# Mask credit card number (show only last 4 digits)
+card_text = "My credit card number is 4539 1488 0343 6467"
+masked_card = re.sub(r'\d(?=\d{4})', '*', card_text.replace(" ", ""))
+print("Masked Card:", masked_card)
+
+
+# Remove HTML tags
+html_text = "<html><body><h1>Welcome</h1><p>This is <b>Python</b> Regex</p></body></html>"
+clean_html = re.sub(r'<.*?>', '', html_text)
+print("Without HTML:", clean_html)
+
+
+# Replace multiple punctuation with single one
+punct_text = "Wow!!! This is amazing... Really??? Yes!!!"
+clean_punct = re.sub(r'([.!?])\1+', r'\1', punct_text)
+print("Clean Punctuation:", clean_punct)

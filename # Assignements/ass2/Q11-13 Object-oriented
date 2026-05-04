@@ -1,0 +1,72 @@
+# 11.)
+students = [
+    ("Alice", 78),
+    ("Bob", 45),
+    ("Charlie", 88),
+    ("David", 60)
+]
+ 
+# 1. students marks>= 50
+passed_students = list(filter(lambda s: s[1] >= 50, students))
+print(passed_students)
+# 2. added 5 grace marks
+grace_marks = list(map(lambda s: (s[0], s[1] + 5), passed_students))
+print(grace_marks)
+# 3.srt by marks
+sorted_students = sorted(grace_marks, key=lambda s: s[1], reverse=True)
+print(sorted_students)
+ 
+ 
+ 
+#-----------------------------------
+# 12.)
+class BankAccount:
+    def __init__(self, account_no, balance=0):
+        self.account_no = account_no
+        self.balance = balance
+ 
+    def deposit(self, amount):
+        if amount > 0:
+            self.balance += amount
+            print(f"Deposited: {amount}")
+        else:
+            print("Invalid deposit amount")
+ 
+    def withdraw(self, amount):
+        if amount > self.balance:
+            print("Insufficient balance")
+        elif amount <= 0:
+            print("Invalid withdrawal amount")
+        else:
+            self.balance -= amount
+            print(f"Withdrawn: {amount}")
+ 
+    def show_balance(self):
+        print(f"Account No: {self.account_no}, Balance: {self.balance}")
+ 
+acc = BankAccount("12345", 1000)
+acc.deposit(500)
+acc.withdraw(300)
+acc.show_balance()
+ 
+# -----------------------------------------------------------------------
+# 13.)
+class Person:
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
+ 
+    def display(self):
+        print(f"Name: {self.name}")
+        print(f"Age: {self.age}")
+class Teacher(Person):
+    def __init__(self, name, age, subject, salary):
+        super().__init__(name, age)
+        self.subject = subject
+        self.salary = salary
+    def display(self):
+        super().display()  # call Person's display
+        print(f"Subject: {self.subject}")
+        print(f"Salary: {self.salary}")
+t1 = Teacher("Lakshmi", 30, "Math", 50000)
+t1.display()
