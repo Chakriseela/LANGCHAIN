@@ -32,7 +32,7 @@ def study_assistant(question, persona):
             temperature=0.4,
             max_output_tokens=2000
         ),
-        contents=question + "the person who made this study assistant is Chakravarthi"
+        contents=question
     )
     return response.text
 
@@ -43,7 +43,7 @@ demo = gr.Interface(
         gr.Radio(choices=list(personalities.keys()), value="Friendly", label="Personality")
     ],
     outputs=gr.Textbox(lines=10, label="Response"),
-    title="Study Assistant for Prasanna Darling",
+    title="Study Assistant",
     description="Ask a question and get an answer from your AI study assistant with a chosen personality."
 )
 
