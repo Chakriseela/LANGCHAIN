@@ -1,9 +1,9 @@
 # =========================
 # 1. INSTALL DEPENDENCIES
 # =========================
-!pip install -q langchain langchain-community langchain-text-splitters
-!pip install -q faiss-cpu pypdf pandas matplotlib seaborn
-!pip install -q google-genai reportlab
+# !pip install -q langchain langchain-community langchain-text-splitters
+# !pip install -q faiss-cpu pypdf pandas matplotlib seaborn
+# !pip install -q google-genai reportlab
 
 
 # =========================
