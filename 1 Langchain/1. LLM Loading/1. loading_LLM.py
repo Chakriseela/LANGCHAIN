@@ -1,5 +1,8 @@
+import os
+from dotenv import load_dotenv
 from langchain_core.prompts import PromptTemplate
 from langchain_openai import ChatOpenAI
+load_dotenv()
 # ***********************************************************
                         # OPENAI #
 # ***********************************************************
@@ -30,3 +33,22 @@ def LLM_call_Gemini_AI():
 LLM_call_Gemini_AI()
 
 # ***********************************************************
+                        # LANGCHAIN LLM LOADING #
+# ***********************************************************
+from langchain.chat_models import init_chat_model
+from langchain.messages import HumanMessage, SystemMessage
+
+# from google.colab import userdata
+api_key=os.getenv('OPENAI_API_KEY')
+
+system_msg = SystemMessage("You are a helpful assistant.")
+human_msg = HumanMessage("What are Ai Agents?")
+messages = [system_msg, human_msg]
+
+model = init_chat_model(
+  "openai:gpt-4.1",
+  api_key=api_key,
+)
+
+response = model.invoke(messages)
+print(response.content)
