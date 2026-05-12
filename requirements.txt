@@ -1,0 +1,18 @@
+langchain
+langchain-community
+langchain-core
+openai
+tiktoken
+python-dotenv
+pydantic
+faiss-cpu
+chromadb
+huggingface_hub
+transformers
+sentence-transformers
+langchain-google-genai
+langchain-tavily
+
+
+# cd LANGCHAIN
+# pip install -r requirements.txt
