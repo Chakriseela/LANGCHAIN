@@ -1,80 +1,107 @@
 # !pip install -U langchain-google-genai
 # !pip install langchain-tavily
+
 import os
-from dotenv import load_dotenv  
-from langchain.chat_models import init_chat_model
-from langchain_tavily import TavilySearch
-from langchain.agents import create_agent
 import requests
 from langchain.tools import tool
-# from google.colab import userdata
+from langchain_tavily import TavilySearch
+from langchain.chat_models import init_chat_model
+from langchain.agents import create_agent
+from langgraph.checkpoint.memory import InMemorySaver
+from dotenv import load_dotenv
 load_dotenv()
+# from google.colab import userdata
 
-google_api_key = os.getenv('GOOGLE_API_KEY')
-model = init_chat_model(
-    "google_genai:gemini-2.5-flash", 
-    api_key=google_api_key
-)
-
-
-tavily_api_key = os.getenv('TAVILY_API_KEY')
+TAVILY_API_KEY = os.getenv("TAVILY_API_KEY")
+RAPIDAPI_KEY = os.getenv("RAPIDAPI_KEY")
+GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 
 skill_demand_tool = TavilySearch(
     max_results=5,
     search_depth="advanced",
-    tavily_api_key=tavily_api_key
+    tavily_api_key=TAVILY_API_KEY,
 )
-
-
-import requests
-from langchain.tools import tool
 
 @tool
 def search_jobs(skill: str, location: str) -> list:
-    """Search for jobs requiring a specific skill using JSearch API from RapidAPI."""
-    print(f"\nCalling search_jobs tool")
+    """
+    Search for jobs requiring a specific skill using the JSearch API.
+    """
+    print("\nCalling search_jobs tool")
     print(f"Searching jobs for: {skill} in {location}")
-
-    rapidapi_key = os.getenv('RAPIDAPI_KEY')
-
     url = "https://jsearch.p.rapidapi.com/search"
     headers = {
-        "x-rapidapi-key": rapidapi_key,
-        "x-rapidapi-host": "jsearch.p.rapidapi.com"
+        "x-rapidapi-key": RAPIDAPI_KEY,
+        "x-rapidapi-host": "jsearch.p.rapidapi.com",
     }
-    querystring = {
+    params = {
         "query": f"{skill} in {location}",
         "page": "1",
+        "num_pages": "1",
         "country": "in",
         "employment_types": "INTERN,FULLTIME",
-        "job_requirements": "no_experience,under_3_years_experience"
+        "job_requirements": "no_experience,under_3_years_experience",
     }
-
-    response = requests.get(url, headers=headers, params=querystring)
+    response = requests.get(url, headers=headers, params=params)
     data = response.json()
-
     jobs = data.get("data", [])
     print(f"Found {len(jobs)} jobs\n")
-
-    result = []
-    for job in jobs:
-        result.append({
+    return [
+        {
             "title": job.get("job_title"),
             "company": job.get("employer_name"),
             "location": job.get("job_city"),
-            "apply_link": job.get("job_apply_link")
-        })
-    return result
+            "apply_link": job.get("job_apply_link"),
+        }
+        for job in jobs
+    ]
 
+SYSTEM_PROMPT = """
+You are a Skill-to-Career Mapping assistant that helps students understand skill demand
+and find matching job opportunities.
 
-result = skill_demand_tool.invoke({"query": "generative ai skills demand 2025"})
-print(result)
+You have access to these tools:
+- skill_demand_tool: Research industry demand, salary insights, and career trends
+- search_jobs: Find real job listings based on skills and location
 
+Present results in a clean, readable format with clear sections and spacing.
+Include all job details with apply links.
+Do not use markdown formatting.
+"""
 
+model = init_chat_model(
+    "google_genai:gemini-2.5-flash",
+    api_key=GOOGLE_API_KEY,
+)
 
+checkpointer = InMemorySaver()
+config = {"configurable": {"thread_id": "1"}}
 
 agent = create_agent(
-  model = model,  #The language model instance
-  tools = [skill_demand_tool],  # List of tools
-#   system_prompt = system_prompt,
+    model=model,
+    system_prompt=SYSTEM_PROMPT,
+    tools=[skill_demand_tool, search_jobs],
+    checkpointer=checkpointer,
+    debug=True,
 )
+
+user_query = (
+    "What's the demand for generative AI in the industry "
+    "and show me related job openings in India"
+)
+
+response = agent.invoke(
+    {"messages": [{"role": "user", "content": user_query}]},
+    config=config,
+)
+
+print(response["messages"][-1].content[0]["text"])
+
+user_query = "Tell me more about the second job you showed"
+
+response = agent.invoke(
+    {"messages": [{"role": "user", "content": user_query}]},
+    config=config,
+)
+
+print(response["messages"][-1].content[0]["text"])
