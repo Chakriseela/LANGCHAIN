@@ -16,3 +16,8 @@ langchain-tavily
 
 # cd LANGCHAIN
 # pip install -r requirements.txt
+
+
+git add .
+git commit -m "Update requirements.txt with necessary dependencies for LangChain project"
+git push origin main
