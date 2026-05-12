@@ -1,14 +1,17 @@
-from google.colab import userdata
+import os
+from dotenv import load_dotenv
+# from google.colab import userdata
 from groq import Groq
 import json
 import requests
+load_dotenv()
 
 client = Groq(
-    api_key = userdata.get('GROQ_API_KEY')
+    api_key = os.getenv('GROQ_API_KEY')
 )
 
 def get_weather(location):
-    api_key = userdata.get('WEATHER_API_KEY')
+    api_key = os.getenv('WEATHER_API_KEY')
     url = f"http://api.openweathermap.org/data/2.5/weather?q={location}&units=metric&appid={api_key}"
     response = requests.get(url)
     data = response.json()
