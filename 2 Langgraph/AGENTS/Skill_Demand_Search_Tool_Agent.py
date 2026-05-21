@@ -9,15 +9,17 @@ from langchain.chat_models import init_chat_model
 from langchain.agents import create_agent
 from langgraph.checkpoint.memory import InMemorySaver
 from dotenv import load_dotenv
+import google.generativeai as genai
+
 load_dotenv()
 # from google.colab import userdata
 
 TAVILY_API_KEY = os.getenv("TAVILY_API_KEY")
 RAPIDAPI_KEY = os.getenv("RAPIDAPI_KEY")
-GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
+GOOGLE_API_KEY = os.getenv("GEMINI_API_KEY")
 
 skill_demand_tool = TavilySearch(
-    max_results=5,
+    max_results=5, 
     search_depth="advanced",
     tavily_api_key=TAVILY_API_KEY,
 )
@@ -46,7 +48,7 @@ def search_jobs(skill: str, location: str) -> list:
     data = response.json()
     jobs = data.get("data", [])
     print(f"Found {len(jobs)} jobs\n")
-    return [
+    return [  
         {
             "title": job.get("job_title"),
             "company": job.get("employer_name"),

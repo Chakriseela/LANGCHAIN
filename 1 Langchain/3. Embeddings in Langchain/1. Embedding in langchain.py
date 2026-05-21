@@ -1,9 +1,13 @@
 # 4. Embedding Example
 
+import os
+from dotenv import load_dotenv
+load_dotenv()
+
 def embedding_1():
     from google import genai
 
-    client = genai.Client(api_key="AIzaSyDrcEFK_3KWMwAHb0mq4D3qqxOij4Zje_A")
+    client = genai.Client(api_key= os.getenv("GOOGLE_API_KEY"))
 
     result = client.models.embed_content(
             model="gemini-embedding-001",
@@ -22,7 +26,7 @@ def embedding_1():
 def embedding_2():
     from google import genai
 
-    client = genai.Client(api_key="AIzaSyDrcEFK_3KWMwAHb0mq4D3qqxOij4Zje_A")
+    client = genai.Client(api_key= os.getenv("GOOGLE_API_KEY"))
 
     texts = [
         "What is the meaning of life?",

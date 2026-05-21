@@ -1,9 +1,10 @@
 import os
 import re
+from dotenv import load_dotenv
 import streamlit as st
 from datetime import datetime
 from google import genai
-
+load_dotenv()
 from langchain_community.vectorstores import FAISS
 from langchain.embeddings.base import Embeddings
 from langchain_core.documents import Document
@@ -49,7 +50,7 @@ h1, h2, h3 { color: #22c55e; }
 # -----------------------------
 # 🔹 Gemini Setup
 # -----------------------------
-client = genai.Client(api_key="AIzaSyBkk5y1pOE_UjOiLXzBDNDtZAitYdW1ml0")
+client = genai.Client(api_key=os.getenv("GOOGLE_API_KEY"))
 
 # -----------------------------
 # 🔹 Custom LLM (for RetrievalQA)

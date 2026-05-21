@@ -1,3 +1,5 @@
+import os
+from flask.cli import load_dotenv
 from google import genai
 import numpy as np
 from datetime import datetime
@@ -5,7 +7,8 @@ from datetime import datetime
 # -----------------------------
 # 1. Setup Gemini
 # -----------------------------
-client = genai.Client(api_key="AIzaSyDrcEFK_3KWMwAHb0mq4D3qqxOij4Zje_A")
+load_dotenv()
+client = genai.Client(api_key=os.getenv("GOOGLE_API_KEY"))
 
 # -----------------------------
 # 2. In-Memory Database

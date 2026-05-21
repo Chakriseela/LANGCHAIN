@@ -1,9 +1,13 @@
 # 3. Sequential Chain (Multi-step Chain)
 
+import os
+from dotenv import load_dotenv
+load_dotenv()
+
 def manual_implementation_of_chains():
     from google import genai
 
-    client = genai.Client(api_key="AIzaSyDrcEFK_3KWMwAHb0mq4D3qqxOij4Zje_A")
+    client = genai.Client(api_key=os.getenv("GOOGLE_API_KEY"))
 
     def summarize(text):
         response = client.models.generate_content(
@@ -41,7 +45,7 @@ def chains_using_langchain():
     # -----------------------------
     class GeminiLLM(LLM):
         def _call(self, prompt, stop=None):
-            client = genai.Client(api_key="AIzaSyA34-lLu-xLIthDFwElzgARjoV38tlxBwc")
+            client = genai.Client(api_key= os.getenv("GOOGLE_API_KEY"))
 
             response = client.models.generate_content(
                 model="gemini-3-flash-preview",

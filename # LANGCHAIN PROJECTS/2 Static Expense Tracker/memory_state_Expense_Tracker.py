@@ -1,10 +1,12 @@
 import os
+from dotenv import load_dotenv
+load_dotenv()
 import streamlit as st
 from langchain_community.vectorstores import FAISS
 from langchain.embeddings.base import Embeddings
 from langchain_core.documents import Document
 from langchain_core.prompts import PromptTemplate
-from langchain_community.chains import RetrievalQA
+# from langchain_community.chains import RetrievalQA
 from google import genai
 from datetime import datetime
 
@@ -65,7 +67,7 @@ def save_vectorstore(vectorstore):
 # -----------------------------
 # 1. Gemini Setup
 # -----------------------------
-client = genai.Client(api_key="AIzaSyA34-lLu-xLIthDFwElzgARjoV38tlxBwc")
+client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
 
 # -----------------------------
 # 2. Custom Embeddings

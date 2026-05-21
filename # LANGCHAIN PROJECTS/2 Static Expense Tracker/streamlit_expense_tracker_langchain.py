@@ -1,3 +1,6 @@
+import os
+from dotenv import load_dotenv
+load_dotenv()
 import streamlit as st
 from langchain_community.vectorstores import FAISS
 from langchain.embeddings.base import Embeddings
@@ -44,7 +47,7 @@ h1, h2, h3 {
 # -----------------------------
 # 1. Gemini Setup
 # -----------------------------
-client = genai.Client(api_key="AIzaSyA34-lLu-xLIthDFwElzgARjoV38tlxBwc")
+client = genai.Client(api_key=os.getenv("GOOGLE_API_KEY"))
 
 # -----------------------------
 # 2. Custom Embeddings

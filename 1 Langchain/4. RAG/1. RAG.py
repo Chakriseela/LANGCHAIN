@@ -1,6 +1,10 @@
 
+import os
+from dotenv import load_dotenv
+load_dotenv()
 from google import genai
-client = genai.Client(api_key="AIzaSyDrcEFK_3KWMwAHb0mq4D3qqxOij4Zje_A")
+
+client = genai.Client(api_key= os.getenv("GOOGLE_API_KEY"))
 
 # Step 1: Store data
 documents = [

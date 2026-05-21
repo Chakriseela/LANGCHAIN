@@ -24,7 +24,7 @@ def LLM_call_OpenAI():
 # ***********************************************************
 def LLM_call_Gemini_AI():
     from google import genai
-    client = genai.Client(api_key="AIzaSyDrcEFK_3KWMwAHb0mq4D3qqxOij4Zje_A")
+    client = genai.Client(api_key= os.getenv("GOOGLE_API_KEY"))
 
     response = client.models.generate_content(
         model="gemini-3-flash-preview", contents="Explain Vector Databases simply"
@@ -50,5 +50,5 @@ model = init_chat_model(
   api_key=api_key,
 )
 
-response = model.invoke(messages)
-print(response.content)
+# response = model.invoke(messages)
+# print(response.content)

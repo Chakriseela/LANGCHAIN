@@ -9,6 +9,9 @@
 # =========================
 # 2. IMPORTS
 # =========================
+import os
+from dotenv import load_dotenv
+load_dotenv()
 from google import genai
 
 import pandas as pd
@@ -28,7 +31,7 @@ from langchain_community.embeddings import HuggingFaceEmbeddings
 # =========================
 # 3. GEMINI CLIENT
 # =========================
-client = genai.Client(api_key="AIzaSyBR7uPM3H8e0C5lylcgANv9QR4gUAVwGxw")
+client = genai.Client(api_key= os.getenv("GOOGLE_API_KEY"))
 
 
 # =========================

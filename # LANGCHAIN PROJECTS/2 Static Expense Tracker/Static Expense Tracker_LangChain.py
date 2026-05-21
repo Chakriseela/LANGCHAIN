@@ -1,3 +1,4 @@
+import os
 from langchain_community.vectorstores import FAISS
 from langchain.embeddings.base import Embeddings
 from langchain_core.documents import Document
@@ -10,7 +11,7 @@ from datetime import datetime
 # -----------------------------
 # 1. Gemini Setup
 # -----------------------------
-client = genai.Client(api_key="AIzaSyDrcEFK_3KWMwAHb0mq4D3qqxOij4Zje_A")
+client = genai.Client(api_key=os.getenv("GOOGLE_API_KEY"))
 
 # -----------------------------
 # 2. Custom Gemini Embeddings

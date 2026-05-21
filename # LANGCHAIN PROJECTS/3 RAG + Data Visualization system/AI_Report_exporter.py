@@ -4,7 +4,7 @@ from google import genai
 from google.genai import types
 load_dotenv()
 
-client = genai.Client(api_key="AIzaSyDiAwmsOTAJfxrKH4gJ5UGIOBwfysSsKFU")
+client = genai.Client(os.getenv("GOOGLE_API_KEY")) 
 
 personalities = {
   "Friendly":
