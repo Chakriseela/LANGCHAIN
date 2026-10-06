@@ -1,0 +1,58 @@
+Questions from ETO interview:
+ 
+Python / Backend / GenAI Interview Questions
+Introduce yourself.
+Explain your current project.
+Describe the architecture of your project.
+What are your key responsibilities in the project?
+Why did you choose Python for your project?
+Rate yourself in Python (out of 10) and justify yourself.
+What are Python Lists, Tuples, Sets, and Dictionaries?
+What is the difference between List and Tuple?
+What are decorators in Python?
+What is the difference between shallow copy and deep copy?
+What is multithreading in Python?
+What is the Global Interpreter Lock (GIL)?
+What is FastAPI?
+What is dependency injection in FastAPI?
+How do you create API endpoints in FastAPI?
+What are HTTP methods (GET, POST, PUT, DELETE)?
+What are HTTP status codes?
+What is the difference between 200, 201, 400, 401, 403, 404, and 500 status codes?
+What is JWT Token?
+Explain JWT lifecycle.
+What are Access Token and Refresh Token?
+How does authentication work in APIs?
+Database Questions
+Difference between Primary Key and Unique Key?
+What is a Foreign Key?
+What is Normalization?
+What are Joins?
+Pandas Questions
+How do you read a CSV file using Pandas?
+Difference between loc and iloc?
+How do you handle missing values?
+What is groupby()?
+How do you merge two DataFrames?
+NumPy Questions
+Difference between NumPy Array and Python List?
+What are NumPy dimensions and shapes?
+What is broadcasting in NumPy?
+Difference between reshape() and resize()?
+How do you perform matrix multiplication?
+GenAI / LLM Questions
+What is Generative AI?
+What is an LLM?
+How does an LLM work?
+What is tokenization?
+What are embeddings?
+What is a vector database?
+What is RAG (Retrieval-Augmented Generation)?
+What are chunks in RAG?
+What is prompt engineering?
+What is fine-tuning?
+Difference between Fine-tuning and RAG?
+What is hallucination in LLMs?
+How do you reduce hallucinations?
+What is the Principle of Least Privilege?
+How do AWS services authenticate using IAM Roles?

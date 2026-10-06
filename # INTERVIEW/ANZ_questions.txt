@@ -1,0 +1,295 @@
+ANZ Questions 
+
+E1
+
+Can you introduce yourself?
+Can you explain the Final Year Project you worked on before joining HCL?
+Can you explain the POCs (Proof of Concepts) you have worked on at HCL?
+What technologies and tools did you use in your POCs?
+What type of agent did you use in your POCs, and why did you choose it?
+Can you explain the workflow of the agent used in your POCs?
+Why did you choose the LLMs used in your projects?
+Why did you choose frameworks like LangChain and LangGraph for your POCs?
+What factors influenced your choice of LLMs and frameworks?
+What was your role and contribution in these POCs?
+Can you explain the different types of RAG architectures used in your POCs?
+Why did you choose those specific RAG techniques?
+What are the differences between the RAG approaches you implemented?
+What is RAG?
+Which LLM did you use for your RAG?
+Which embedding model?
+What is Vector Database?
+How can you improve RAG performance?
+How well did your RAG perform?
+What frameworks have you used for building AI agents?
+
+
+
+
+Dimensionality of
+6. Optimize Retrieval Parameters
+Tune:
+Top-k
+Similarity threshold
+Chunk overlap
+Search strategy
+Benefit: Balances precision and recall.
+-----------------------------------------------------------
+8. Context Compression
+Compress retrieved documents before sending them to the LLM.
+Benefit: Saves tokens and focuses the model on the most relevant information.
+
+How do we implement it?
+LangChain already provides this.
+
+from langchain.retrievers import ContextualCompressionRetriever
+from langchain.retrievers.document_compressors import LLMChainExtractor
+
+compressor = LLMChainExtractor.from_llm(llm)
+compression_retriever = ContextualCompressionRetriever(
+    base_retriever=retriever,
+    base_compressor=compressor
+)
+
+docs = compression_retriever.invoke(
+    "How do I apply for a ration card?"
+)
+
+Flow
+
+User Question
+      ↓
+Retriever
+      ↓
+Top 5 chunks
+      ↓
+LLMChainExtractor
+      ↓
+Relevant Sentences
+      ↓
+Final LLM
+Another approach
+
+Instead of another LLM,
+use
+BM25
+Cross Encoder
+Sentence Transformer
+to extract important sentences.
+Even cheaper.
+
+1. Cross-Encoder (Recommended)
+from sentence_transformers import CrossEncoder
+model = CrossEncoder("cross-encoder/ms-marco-MiniLM-L-6-v2")
+pairs = [
+    (query, doc.page_content)
+    for doc in docs
+]
+scores = model.predict(pairs)
+
+ranked_docs = sorted(
+    zip(docs, scores),
+    key=lambda x: x[1],
+    reverse=True
+)
+top_docs = [doc for doc, score in ranked_docs[:3]]
+
+
+2. Sentence Transformers
+Split into sentences.
+Generate embeddings.
+Compare each sentence with the query.
+Keep only the most relevant sentences.
+
+Example:
+from sentence_transformers import SentenceTransformer, util
+model = SentenceTransformer("all-MiniLM-L6-v2")
+
+sentences = [
+    "The scheme started in 1995.",
+    "Required documents are Aadhaar and Income Certificate.",
+    "The application can be submitted online."
+]
+
+query = "What documents are required?"
+query_emb = model.encode(query)
+sentence_emb = model.encode(sentences)
+scores = util.cos_sim(query_emb, sentence_emb)
+best_sentence = sentences[scores.argmax()]
+
+------------------------------------------------------------
+9. Caching
+Cache:
+Embeddings
+Frequently retrieved documents
+LLM responses
+Benefit: Reduces latency and API costs.
+
+                  User Query
+                       │
+                       ▼
+           Normalize / Semantic Cache Check
+                       │
+             ┌─────────┴─────────┐
+             │                   │
+         Cache Hit          Cache Miss
+             │                   │
+             ▼                   ▼
+   Return Cached Response   Generate Query Embedding
+                                 │
+                                 ▼
+                        Embedding Cache Check
+                                 │
+                                 ▼
+                          Vector Database Search
+                                 │
+                                 ▼
+                    Cross-Encoder / Compression
+                                 │
+                                 ▼
+                             Main LLM
+                                 │
+                                 ▼
+                     Structured JSON Response
+                                 │
+                                 ▼
+                     Store in Response Cache
+                                 │
+                                 ▼
+                         Return to User
+
+
+
+
+
+types of RAG architectures ----
+1. Simple (Naive) RAG
+This is the basic RAG pipeline.
+User Query
+      ↓
+Embedding
+      ↓
+Vector Database
+      ↓
+Top-k Retrieval
+      ↓
+LLM
+      ↓
+Response
+
+@Workflow
+Load documents.
+Split into chunks.
+Generate embeddings.
+Store in FAISS.
+User asks a question.
+Retrieve top-k similar chunks.
+Send chunks + prompt to the LLM.
+Generate the answer.
+------
+Use case
+FAQs
+Internal documentation
+Knowledge base chatbot
+Limitation
+Always retrieves once.
+Cannot validate or refine retrieval.
+No planning or tool usage.
+
+
+2. Advanced RAG
+
+Adds techniques to improve retrieval quality.
+
+User Query
+      ↓
+Query Rewriting
+      ↓
+Hybrid Retrieval
+      ↓
+Re-ranking
+      ↓
+LLM
+
+Features may include:
+
+Query rewriting
+Hybrid search (keyword + vector)
+Metadata filtering
+Parent-child retrieval
+Multi-query retrieval
+Re-ranking
+Benefits
+Better retrieval accuracy
+Less hallucination
+More relevant context
+
+
+
+
+For interviews, it's best to answer with practical techniques rather than just definitions.
+
+## How to reduce hallucinations in a RAG pipeline
+
+1. **Retrieve high-quality documents**
+
+   * Use a good embedding model.
+   * Retrieve only relevant documents.
+
+2. **Use Hybrid Search**
+
+   * Combine **BM25 + Vector Search** to improve retrieval accuracy.
+
+3. **Apply a Reranker**
+
+   * Re-rank the retrieved documents and send only the most relevant ones to the LLM.
+
+4. **Optimize Chunk Size & Overlap**
+
+   * Use appropriate chunk sizes (e.g., 300–600 tokens) with some overlap to preserve context.
+
+5. **Retrieve the Right Number of Chunks (Top-K)**
+
+   * Don't send too few or too many chunks. Typically, Top-3 to Top-5 works well.
+
+6. **Write Strong System Prompts**
+
+   * Example: *"Answer only from the provided context. If the answer is not in the context, say 'I don't know.'"*
+
+7. **Use Metadata Filtering**
+
+   * Filter by document type, date, language, user role, or source before retrieval.
+
+8. **Use High-Quality, Updated Knowledge Base**
+
+   * Remove outdated, duplicate, and incorrect documents.
+
+9. **Ground Every Answer in Retrieved Context**
+
+   * Do not allow the model to answer from its own knowledge when the context is insufficient.
+
+10. **Return "I don't know" When Context Is Missing**
+
+    * It's better than generating incorrect information.
+
+11. **Add Citations/Source References**
+
+    * Show which document or page the answer came from, improving trust and verification.
+
+12. **Use Query Rewriting**
+
+    * Rewrite ambiguous user queries before retrieval to improve search accuracy.
+
+13. **Validate the Response**
+
+    * Use a second LLM or rule-based validator to verify that the answer is supported by the retrieved context.
+
+14. **Continuously Evaluate Retrieval Quality**
+
+    * Measure metrics like Context Precision, Recall, Faithfulness, and Answer Relevance, then tune the pipeline.
+
+---
+
+### Interview answer (30–45 seconds)
+
+> "To reduce hallucinations in a RAG pipeline, I first ensure high-quality retrieval using hybrid search (BM25 + vector search). Then I apply a reranker to select the most relevant chunks, optimize chunk size and Top-K retrieval, and use metadata filtering. I instruct the LLM to answer only from the retrieved context and return 'I don't know' if the information isn't available. Finally, I include source citations and continuously evaluate retrieval quality using metrics like faithfulness and answer relevance."

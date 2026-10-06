@@ -1,0 +1,151 @@
+             RAG
+              |
+       ┌──────┴──────┐
+       ↓             ↓
+   Retrieval       Answer
+       |             |
+ Precision        Faithfulness
+ Recall           Relevancy
+
+********************
+*  RAGAS Metrics
+********************
+1. Faithfulness
+2. Answer Relevancy
+3. Context Precision
+        This evaluates whether the retrieved documents contain relevant 
+        information, and whether irrelevant information is ranked lower.
+        Example:
+        Question:
+        What is the eligibility criteria?
+        Retrieved:
+        1. Eligibility criteria       ← relevant
+        2. Application procedure      ← somewhat relevant
+        3. Payment history             ← irrelevant
+        4. Scheme launch date          ← irrelevant
+        A good retriever should rank the useful information highly.
+
+4. Context Recall
+        Question:
+        Did the retrieval system retrieve all the information necessary to answer the question?
+        Suppose the correct answer requires:
+        Eligibility:
+        - Farmer must own agricultural land
+        - Must meet income criteria
+        - Must have valid documents
+        But retrieval only gives:
+        Farmer must own agricultural land.
+        The retriever missed important information.
+        ❌ Low context recall.
+
+Faithfulness
+    Is the response supported by the context?
+Contextual Relevancy
+    Is retrieved context relevant?
+Contextual Recall
+    Did retrieval capture the required information?
+Contextual Precision
+    Was relevant context ranked appropriately?
+
+
+********************
+*   DeepEval
+********************
+DeepEval is another important framework.
+It is more general than just traditional RAG evaluation.
+You can evaluate:
+LLM applications
+RAG
+Agents
+Chatbots
+Multi-agent systems
+
+
+*********************
+*   Arize Phoenix
+*********************
+Phoenix is mainly focused on:
+Observability + Evaluation
+It can help monitor:
+LLM calls
+Retrieval
+Latency
+Token usage
+Traces
+Embeddings
+Hallucination
+
+
+*********************
+*LLM-as-a-Judge
+*********************
+Architecture:
+
+User Question
+      ↓
+     LLM
+      ↓
+Generated Answer
+      ↓
+   Evaluator LLM
+      ↓
+ ┌────┴────┐
+ ↓         ↓
+Score    Reason
+
+
+***********************************
+*   Evaluation Pipeline           *
+***********************************
+                 Evaluation Dataset
+                         ↓
+                 ┌───────────────┐
+                 │   RAG System  │
+                 └───────┬───────┘
+                         ↓
+               ┌──────────────────┐
+               │ Retrieved Context│
+               └────────┬─────────┘
+                        ↓
+                    LLM Answer
+                        ↓
+              ┌────────────────────┐
+              │Evaluation Framework│
+              └─────────┬──────────┘
+                        ↓
+       ┌────────────────┼────────────────┐
+       ↓                ↓                ↓
+ Retrieval          Generation       Performance
+ metrics             metrics           metrics
+       ↓                ↓                ↓
+ Precision          Faithfulness       Latency
+ Recall             Relevancy          Cost
+
+
+
+              Evaluation Dataset
+                     │
+                     │
+        ┌────────────┴────────────┐
+        ↓                         ↓
+   Question                 Ground Truth
+        │                  ┌──────────────┐
+        │                  │ Expected     │
+        │                  │ Answer       │
+        │                  │ Relevant Docs│
+        │                  └──────────────┘
+        ↓
+     RAG System
+        │
+        ├──────────────→ Retrieved Documents
+        │                       │
+        ↓                       ↓
+    LLM Answer          Retrieval Evaluation
+        │                       │
+        │                       ├── Precision
+        │                       └── Recall
+        ↓
+ Generation Evaluation
+        │
+        ├── Faithfulness
+        └── Answer Relevancy
